@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -14,23 +15,22 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 Route::get('/blog', function () {
-    $post = new  App\Models\Posts();
-    $post->title = 'Mon Premier Article';
-    $post->slug = 'Mon-Premier-Article';
-    $post->content = 'Mon Contenu';
-    $post->save();
+    // $post = new  App\Models\Posts();
+    // $post->title = 'Mon Premier Article';
+    // $post->slug = 'Mon-Premier-Article';
+    // $post->content = 'Mon Contenu';
+    // $post->save();
 
-    return [
-        $post
-    ];
+    // return [
+    //     $post
+    // ];
 });
 
+Route::get('/', [BlogController::class, 'index']);
 
 
 Route::get('/blog/{slug}-{id}', function (string $slug, string $id) {
