@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,18 @@ Route::get('/', function () {
 });
 
 
-# 1.Routing
+Route::get('/blog', function (Request $request) {
+    return [
+        'name' => $request->all(),
+        'article' => 'Article 1',
+    ];
+})->name('blog.index');
+
+
+
+Route::get('/blog/{slug}-{id}', function (string $slug, string $id) {
+    return [
+        'slug' => $slug,
+        'id' => $id,
+    ];
+});
