@@ -19,12 +19,17 @@ Route::get('/', function () {
 });
 
 
-Route::get('/blog', function (Request $request) {
+Route::get('/blog', function () {
+    $post = new  App\Models\Posts();
+    $post->title = 'Mon Premier Article';
+    $post->slug = 'Mon-Premier-Article';
+    $post->content = 'Mon Contenu';
+    $post->save();
+
     return [
-        'name' => $request->all(),
-        'article' => 'Article 1',
+        $post
     ];
-})->name('blog.index');
+});
 
 
 
