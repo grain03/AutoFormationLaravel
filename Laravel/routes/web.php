@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -39,3 +40,4 @@ Route::get('/blog/{slug}-{id}', function (string $slug, string $id) {
         'id' => $id,
     ];
 });
+

@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Posts;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class BlogController extends Controller
 {
-    public function index(): Paginator
+    public function index(): View
     {
-        return Posts::paginate(1);
+        Posts::paginate(1);
+        return view('blog.index');
     }
 
     public function show(string $slug, string $id): RedirectResponse | Posts
