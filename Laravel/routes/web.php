@@ -18,24 +18,25 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('/blog')->name('blog.')->group(function (){
+    Route::get('/', function (Request $request) {
+        return [
+            "link" => \route('blog.show', ['slug' => 'article', 'id'=> 13]),
+        ];
+    })->name('index');
+    
+    
+    
+    Route::get('/{slug}-{id}', function (string $slug, string $id, Request $request) {
+        return [
+            'slug' => $slug,
+            'id' => $id,
+            'name' => $request->input('name'),
+        ];
+    })->where([
+        'id' => '[0-9]+',
+        'slug' => '[a-z0-9\-]+',
+    ])->name('show');
 
-Route::get('/blog', function () {
-    $post = new  App\Models\Posts();
-    $post->title = 'Mon Premier Article';
-    $post->slug = 'Mon-Premier-Article';
-    $post->content = 'Mon Contenu';
-    $post->save();
-
-    return [
-        $post
-    ];
 });
 
-
-
-Route::get('/blog/{slug}-{id}', function (string $slug, string $id) {
-    return [
-        'slug' => $slug,
-        'id' => $id,
-    ];
-});
