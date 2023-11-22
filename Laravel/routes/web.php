@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Models\Posts;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,19 +21,21 @@ Route::get('/', function () {
 
 Route::prefix('/blog')->name('blog.')->group(function (){
     Route::get('/', function (Request $request) {
-        return [
-            "link" => \route('blog.show', ['slug' => 'article', 'id'=> 13]),
-        ];
+        
+        $post = new Posts();
+        return $post::paginate(25);
+
+
     })->name('index');
     
     
     
     Route::get('/{slug}-{id}', function (string $slug, string $id, Request $request) {
-        return [
-            'slug' => $slug,
-            'id' => $id,
-            'name' => $request->input('name'),
-        ];
+        $post = new Posts();
+        return $post::findorFail($id);
+        if($post->slug !== $slug){
+            return to_route('blog.show', ['slug' => $post->slug])
+        }
     })->where([
         'id' => '[0-9]+',
         'slug' => '[a-z0-9\-]+',
