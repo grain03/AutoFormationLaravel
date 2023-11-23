@@ -17,9 +17,11 @@ class BlogController extends Controller
 
     public function show(string $slug, string $id): RedirectResponse | Posts
     {
-        $post = Posts::findOrFail($id);
-        if ($post->slug !== $slug) {
+        $post = new Posts();
+        $post = $post::findOrFail($id);
+        if($post->slug !== $slug){
             return to_route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
         }
+        return $post;
     }
 }
