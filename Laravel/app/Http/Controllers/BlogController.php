@@ -13,17 +13,21 @@ class BlogController extends Controller
 {
     public function index(): View
     {
-        Posts::paginate(1);
-        return view('blog.index');
+        $post = new Posts();
+        return view('blog.index', [
+            'posts' => $post::paginate(1),
+        ]);
     }
 
-    public function show(string $slug, string $id): RedirectResponse | Posts
+    public function show(string $slug, string $id): RedirectResponse | View
     {
         $post = new Posts();
         $post = $post::findOrFail($id);
         if($post->slug !== $slug){
             return to_route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
         }
-        return $post;
+        return view('blog.show', [
+            'post' => $post,
+        ]);
     }
 }
