@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Models\Posts;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,27 +16,32 @@ use Illuminate\Http\Request;
 |
 */
 
-
-
-
-Route::get('/blog', function () {
-    // $post = new  App\Models\Posts();
-    // $post->title = 'Mon Premier Article';
-    // $post->slug = 'Mon-Premier-Article';
-    // $post->content = 'Mon Contenu';
-    // $post->save();
-
-    // return [
-    //     $post
-    // ];
+Route::get('/', function () {
+    return view('welcome');
 });
 
-Route::get('/', [BlogController::class, 'index']);
+Route::prefix('/blog')->name('blog.')->group(function (){
+    Route::get('/', function (Request $request) {
+        
+        $post = new Posts();
+        return $post::paginate(25);
 
 
-Route::get('/blog/{slug}-{id}', function (string $slug, string $id) {
-    return [
-        'slug' => $slug,
-        'id' => $id,
-    ];
+    })->name('index');
+    
+    
+    
+    Route::get('/{slug}-{id}', function (string $slug, string $id, Request $request) {
+        $post = new Posts();
+        $post = $post::findOrFail($id);
+        if($post->slug !== $slug){
+            return to_route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
+        }
+        return $post;
+    })->where([
+        'id' => '[0-9]+',
+        'slug' => '[a-z0-9\-]+',
+    ])->name('show');
+
 });
+
