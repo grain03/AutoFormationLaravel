@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Posts;
+use App\Http\Requests\BlogFilterRequest;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class BlogController extends Controller
 {
-    public function index(): View
+    public function index(BlogFilterRequest $request): View
     {
         $post = new Posts();
         return view('blog.index', [
@@ -23,7 +24,7 @@ class BlogController extends Controller
     {
         $post = new Posts();
         $post = $post::findOrFail($id);
-        if($post->slug !== $slug){
+        if ($post->slug !== $slug) {
             return to_route('blog.show', ['slug' => $post->slug, 'id' => $post->id]);
         }
         return view('blog.show', [
